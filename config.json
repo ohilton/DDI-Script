@@ -1,0 +1,6 @@
+{
+    "SQLServer": "DB-RTSinfonia",
+    "Database": "RTSinfonia",
+    "WhereClause": "szComment like '%ESP DNX%'",
+    "ArtifactLocation": "./doc/MyDDIList.csv"
+}
