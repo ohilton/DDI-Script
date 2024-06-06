@@ -9,6 +9,10 @@ function Get-Hash {
         [string]$Destination
     )
 
+    # Initialize result and hash variables
+    $result = 1
+    $hash = ''
+
     # Check if the file exists
     if (Test-Path -Path $Destination -PathType Leaf) {
         $result = 0
@@ -27,8 +31,14 @@ function Get-Hash {
         }
     }
 
-    # Return the output object
-    return $result, $hash
+    # Create a custom object to hold the result and hash
+    $output = [PSCustomObject]@{
+        Result = $result
+        Hash   = $hash
+    }
+
+    # Output the object
+    Write-Output $output
 }
 
-Export-ModuleMember function Get-Hash
+Export-ModuleMember -Function Get-Hash
