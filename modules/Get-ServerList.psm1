@@ -4,17 +4,17 @@
 # Import the required assemblies for SQL Server
 Add-Type -AssemblyName System.Data
 
-function Invoke-SqlQuery {
+function Get-ServerList {
     param (
         [string]$SqlServer,
         [string]$Database,
         [string]$Username,
-        [securestring]$Password,
+        [string]$Password,
         [string]$WhereClause
     )
 
     # Construct the SQL query with the provided WHERE clause
-    $query = "SELECT * FROM RTSinfonia..Chassis WHERE $WhereClause WITH(NOLOCK)"
+    $query = "SELECT Name FROM RTSinfonia..Chassis WITH(NOLOCK) WHERE $WhereClause"
 
     # Create a new SQL connection
     $connectionString = "Server=$SqlServer;Database=$Database;User Id=$Username;Password=$Password;"

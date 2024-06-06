@@ -21,18 +21,28 @@ $serverList = Get-ServerList -SqlServer $config.SQLServer `
                           -Password $config.Password `
                           -WhereClause $config.WhereClause
 
+$serverLength = $serverList.Length - 1
+
+Write-Host $serverLength ' servers found'
+
 # Initiate empty results
-$results = {}
+$results = @{}
 
 # Execute Get-Hash on each server
-foreach ($server in $serverList) {
-    $filePath = '\\' + $server + '.timeforstorm.com\D$\RT\Partitions\p_8659\s_9447\user\DDI_List.csv'
-    ($result, $hash) = Get-Hash -Destination $filePath
+for ($i = 1; $i -lt $serverList.Length; $i++) {
+    $server = $serverList[$i][0]
+    Write-Host 'Processing ' $server
 
-    if ($result -eq 1) {
+    $filePath = '\\' + $server + '.timeforstorm.com\D$\RT\Partitions\p_8659\s_9447\user\DDI_List.csv'
+    $output = Get-Hash -Destination $filePath
+    
+    $result = $output.Result
+    $hash = $output.Hash
+
+    if ($result -ne 0) {
         $results[$server] = "File not found"
 
-        $msg = 'The file "' + $filePath + '" does not exist'
+        $msg = 'The file "' + $filePath + '" cannot be found'
         Write-Warning $msg
     }
 
@@ -45,4 +55,14 @@ foreach ($server in $serverList) {
             $results[$server] = "Found but does not match"
         }
     }
+}
+
+# Process results
+Write-Host 'Results:'
+
+foreach ($result in $results.GetEnumerator()) {
+    $server = $result.Key
+    $msg = $result.Value
+
+    Write-Host $server ': ' $msg
 }
