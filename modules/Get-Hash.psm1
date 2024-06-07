@@ -4,6 +4,9 @@
 # 0 = success (found file and obtained hash)
 # 1 = failed (file not found)
 
+Import-Module -Name "./modules/Get-SHA256Hash.psm1"
+Import-Module -Name "./modules/Get-NormalLineEndings.psm1"
+
 function Get-Hash {
     param (
         [string]$Destination
@@ -19,13 +22,20 @@ function Get-Hash {
 
         # Compute the file hash
         try {
-            $hashAlgorithm = [System.Security.Cryptography.HashAlgorithm]::Create("SHA256")
-            $fileStream = [System.IO.File]::OpenRead($Destination)
-            $hashBytes = $hashAlgorithm.ComputeHash($fileStream)
-            $fileStream.Close()
+            Write-Host $Destination
 
-            # Convert hash bytes to a hex string
-            $hash = [BitConverter]::ToString($hashBytes) -replace '-', ''
+            $localContent = Get-Content -Path $Destination -Raw
+            $normalizedLocalContent = Get-NormalLineEndings -Content $localContent
+            $hash = Get-SHA256Hash -InputString $normalizedLocalContent
+
+            # $fileBytes = [System.IO.File]::ReadAllBytes($Destination)
+            # $hash = Get-SHA256Hash -ByteArray $fileBytes
+            # $fileStream.Close()
+
+            # [System.IO.File]::ReadAllBytes
+
+            # # Convert hash bytes to a hex string
+            # $hash = [BitConverter]::ToString($hashBytes) -replace '-', ''
         } catch {
             Write-Error "Error computing file hash: $_"
         }

@@ -4,5 +4,6 @@
     "WhereClause": "Comment like '%ESP%' AND Comment like '%DNX%'",
     "ArtifactLocation": "./doc/MyDDIList.csv",
     "Username": "DBCountCheck",
-    "Password": "DBC0untCh3ck"
+    "Password": "DBC0untCh3ck",
+    "token": "Q3cRuh2YTW7WAf94k4Rd"
 }
