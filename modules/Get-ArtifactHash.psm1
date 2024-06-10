@@ -3,39 +3,20 @@ Import-Module -Name "./modules/Get-NormalLineEndings.psm1"
 
 function Get-ArtifactHash {
     param (
-        [string]$Token
     )
 
-    # Define variables
-    $GitLabToken = $Token  # Replace with your GitLab Personal Access Token
-    $GitLabApiUrl = "https://gitlab.redwood.com/api/v4"  # Replace with your GitLab instance URL if self-hosted
-    $ProjectId = "1905"  # Replace with your GitLab project ID
-    $FilePath = "files/DDI_List.csv"  # Replace with the path to the file in the repository
-    $Branch = "master"  # Replace with the branch name (e.g., 'main', 'master', etc.)
+    # Get hash
+    $getHashResult = Get-Hash -Destination "artifact\DDI_List.csv"
+    $hash = $getHashResult.hash
 
-    # URL encode the file path
-    $EncodedFilePath = [System.Web.HttpUtility]::UrlEncode($FilePath)
+    # Notify last modified time
+    $file = Get-Item "artifact\DDI_List.csv"
+    $lastModified = $file.LastWriteTime
+    Write-Host 'Last modified time is '$lastModified'. Please refer to wiki to ensure this is up to date.'
 
-    # Build the API URL to get the file content
-    $ApiUrl = "$GitLabApiUrl/projects/$ProjectId/repository/files/$EncodedFilePath/raw?ref=$Branch"
-
-    try {
-        # Fetch the file content from GitLab
-        $response = Invoke-RestMethod -Uri $ApiUrl -Headers @{ "PRIVATE-TOKEN" = $GitLabToken } -Method Get
-        Write-Host "File content retrieved from GitLab"
-
-        # Normalize line endings of the fetched content
-        $normalizedResponse = Get-NormalLineEndings -Content $response
-
-        # Compute the hash of the fetched and normalized file content
-        $hashGitLab = Get-SHA256Hash -InputString $normalizedResponse
-        Write-Host "GitLab file hash (SHA256): $hashGitLab"
-
-    } catch {
-        Write-Host "Error in Get-ArtifactHash: $_"
-    }
-
-    Write-Output $hashGitLab
+    # Write/Output hash
+    Write-Host 'Artifact hash: ' $hash
+    Write-Output $hash
 }
 
 Export-ModuleMember -Function Get-ArtifactHash

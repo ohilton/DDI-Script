@@ -22,7 +22,7 @@ function Get-Hash {
 
         # Compute the file hash
         try {
-            Write-Host $Destination
+            Write-Host 'Destination: ' $Destination
 
             $localContent = Get-Content -Path $Destination -Raw
             $normalizedLocalContent = Get-NormalLineEndings -Content $localContent

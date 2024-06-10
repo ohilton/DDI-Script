@@ -1,8 +1,7 @@
 {
     "SQLServer": "DB-RTSinfonia",
     "Database": "RTSinfonia",
-    "WhereClause": "Comment like '%ESP%' AND Comment like '%DNX%'",
-    "ArtifactLocation": "./doc/MyDDIList.csv",
+    "WhereClause": "Comment like '%ESP%' AND Comment like '%DNX%' AND ( Comment like '%SL%' OR Comment like '%TH%' )",
     "Username": "DBCountCheck",
     "Password": "DBC0untCh3ck",
     "token": "Q3cRuh2YTW7WAf94k4Rd"

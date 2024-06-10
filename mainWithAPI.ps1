@@ -1,7 +1,7 @@
 # Import the custom modules
 Import-Module -Name "./modules/Get-ServerList.psm1"
 Import-Module -Name "./modules/Get-Hash.psm1"
-Import-Module -Name "./modules/Get-ArtifactHash.psm1"
+Import-Module -Name "./modules/Get-ArtifactHashUsingAPI.psm1"
 
 # Get the configuration from the JSON file
 # Read the JSON file
@@ -10,7 +10,7 @@ $jsonContent = Get-Content -Path './config.json' -Raw
 $config = $jsonContent | ConvertFrom-Json
 
 # Store artifact hash
-$ArtifactHash = Get-ArtifactHash -Token $config.token
+$ArtifactHash = Get-ArtifactHashUsingAPI -Token $config.token
 
 # Execute Get-ServerList
 $serverList = Get-ServerList -SqlServer $config.SQLServer `
